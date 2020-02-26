@@ -1,8 +1,25 @@
-#container {
-  background-color: greenyellow;
+textarea {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+#editor-container {
   height: 75vh;
   width: 95vw;
   display: flex;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+}
+
+#other-stuff {
+  background-color: cyan;
+  height: 200px;
+  width: 95vw;
 }
 
 #gutter {
