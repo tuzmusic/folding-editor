@@ -1,9 +1,11 @@
 import React from 'react';
 import './App.css';
+import TextEntryModel from './models/TextEntryModel';
 
 class App extends React.Component {
   state = {
-    text: 'one line of text \nanother line of text',
+    // text: 'one line of text \nanother line of text',
+    text: '',
   };
 
   get lines(): string[] {
@@ -12,7 +14,9 @@ class App extends React.Component {
 
   changeText = (event: any) => {
     const text = event.target.value;
-    this.setState({ text });
+    const model = new TextEntryModel();
+    model.setText(text);
+    this.setState({ text: model.getText() });
   };
 
   render() {
