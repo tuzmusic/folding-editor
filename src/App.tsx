@@ -4,19 +4,19 @@ import TextEntryModel from './models/TextEntryModel';
 
 class App extends React.Component {
   state = {
-    // text: 'one line of text \nanother line of text',
-    text: '',
+    text: 'one line of text \nanother line of text',
   };
+  model: TextEntryModel = new TextEntryModel();
 
-  get lines(): string[] {
-    return this.state.text.split('\n');
+  constructor(props: any) {
+    super(props);
+    this.model.setText(this.state.text);
   }
 
   changeText = (event: any) => {
     const text = event.target.value;
-    const model = new TextEntryModel();
-    model.setText(text);
-    this.setState({ text: model.getText() });
+    this.model.setText(text);
+    this.setState({ text: this.model.getText() });
   };
 
   render() {
@@ -25,15 +25,12 @@ class App extends React.Component {
         <div id="editor-container">
           <div id="gutter"/>
           <div id="editor">
-          <textarea
-            value={ this.state.text }
-            onChange={ this.changeText }
-          />
+            <textarea onChange={ this.changeText }/>
           </div>
         </div>
         <div id="other-stuff">
-          { this.lines.map(line =>
-            <p>{ line.length } - { line }</p>)
+          { this.model.lines.map((line, i) =>
+            <p>({ line.indentLevel }) - { line.text }</p>)
           }
         </div>
       </div>
