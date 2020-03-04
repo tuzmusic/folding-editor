@@ -6,7 +6,7 @@ const LineContainer = styled.div({
   display: 'flex',
 });
 
-const LineGutter = styled.div({
+const LineGutter = styled.div<{ canFold: boolean }>(({
   display: 'inline-block',
   borderRight: 'solid thin black',
   minWidth: '25px',
@@ -14,7 +14,7 @@ const LineGutter = styled.div({
   paddingLeft: '4px',
   paddingRight: '4px',
   boxSizing: 'border-box',
-});
+}), ({ canFold }) => ({ color: canFold ? 'red' : 'black' }));
 
 const LineText = styled.div({
   display: 'inline',
@@ -28,6 +28,7 @@ const LineText = styled.div({
 type Props = {
   line: TextLine
   number: number
+  canFold: boolean
 }
 
 const indentSpaces = 4;
@@ -35,10 +36,10 @@ const indentSpaces = 4;
 class TextLineComponent extends React.Component<Props> {
 
   render = () => {
-    const { line, number } = this.props;
+    const { line, canFold } = this.props;
     return (
       <LineContainer>
-        <LineGutter>{ line.indentLevel }</LineGutter>
+        <LineGutter canFold={ canFold }>{ line.indentLevel }</LineGutter>
         <LineText>{ Array(line.indentLevel * indentSpaces).fill(' ').join('') + line.text }</LineText>
       </LineContainer>
     );
