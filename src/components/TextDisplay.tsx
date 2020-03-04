@@ -20,8 +20,8 @@ class TextDisplay extends React.Component<Props> {
   render = () => (
     <Display>
       {
-        this.props.lines.map(line =>
-          <TextLineComponent line={ line }/>)
+        this.props.lines.map((line, i) =>
+          <TextLineComponent line={ line } number={ i + 1 }/>)
       }
     </Display>
   )

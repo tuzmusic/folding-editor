@@ -20,16 +20,20 @@ const LineGutter = styled.span({
 
 type Props = {
   line: TextLine
+  number: number
 }
 
 class TextLineComponent extends React.Component<Props> {
   
-  render = () => (
-    <Line>
-      <LineGutter>##</LineGutter>
-      <LineText>{ this.props.line.text }</LineText>
-    </Line>
-  )
+  render = () => {
+    const { line, number } = this.props;
+    return (
+      <Line>
+        <LineGutter>{ number }</LineGutter>
+        <LineText>{ line.text }</LineText>
+      </Line>
+    );
+  }
 }
 
 export default TextLineComponent
