@@ -1,15 +1,15 @@
-class TextLine {
+export class TextLine {
   text = '';
   indentLevel = 0;
-
+  
   constructor(text: string) {
     this.text = text;
   }
 }
 
-class TextEntryModel {
+export class TextEntryModel {
   lines: TextLine[] = [];
-
+  
   setText = (text: string) => {
     // break the string into lines
     const linesOfText = text.split('\n');

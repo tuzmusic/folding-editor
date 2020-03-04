@@ -1,12 +1,10 @@
 import React from 'react';
 import TextEntryModel from '../models/TextEntryModel';
 import styled from '@emotion/styled'
-// region Subcomponents
-const FullWidthFlexDiv = styled.div({
-  display: 'flex',
-  width: '100%',
-});
+import { FullWidthFlexDiv } from "./StyledComponents";
+import TextDisplay from "./TextDisplay";
 
+// region
 const Container = styled(FullWidthFlexDiv)({
   flexDirection: 'column',
   height: '95vh',
@@ -15,10 +13,12 @@ const Container = styled(FullWidthFlexDiv)({
 
 const EditorContainer = styled(FullWidthFlexDiv)({
   flex: 1,
+  border: 'solid black thin',
 });
 
 const TextDisplayContainer = styled(FullWidthFlexDiv)({
   flex: 1,
+  border: 'solid black thin',
 });
 
 const TextArea = styled.textarea({
@@ -30,10 +30,11 @@ const TextArea = styled.textarea({
 });
 
 const Display = styled(FullWidthFlexDiv)({
-  backgroundColor: 'cyan',
+  backgroundColor: 'white',
   boxSizing: 'border-box',
   height: '100%',
-  paddingLeft: '10px',
+  padding: '5px',
+  flexDirection: 'column'
 });
 
 const EditorGutter = styled.div({
@@ -52,11 +53,10 @@ const Editor = styled.div({
 });
 
 // endregion
+const startingText = 'one line of text \nanother line of text';
 
 class App extends React.Component {
-  state = {
-    text: 'one line of text \nanother line of text',
-  };
+  state = { text: startingText, };
   model: TextEntryModel = new TextEntryModel();
   
   constructor(props: any) {
@@ -73,19 +73,23 @@ class App extends React.Component {
   render() {
     return (
       <Container>
-        <EditorContainer id='editor-container'>
+        <EditorContainer>
           <EditorGutter/>
           <Editor>
-            <TextArea onChange={ this.changeText }/>
+            <TextArea
+              value={ this.state.text }
+              onChange={ this.changeText }
+            />
           </Editor>
         </EditorContainer>
         <TextDisplayContainer>
           <DisplayGutter/>
-          <Display>
+          <TextDisplay lines={ this.model.lines }/>
+          {/*<Display>
             { this.model.lines.map((line, i) =>
-              <p>({ line.indentLevel }) - { line.text }</p>)
+              <div>({ line.indentLevel }) - { line.text }</div>)
             }
-          </Display>
+          </Display>*/ }
         </TextDisplayContainer>
       </Container>
     );
