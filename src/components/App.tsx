@@ -40,8 +40,11 @@ const Editor = styled.div({
 });
 
 // endregion
-const startingText =
-  Array.from({ length: 20 }, (_, i) => `${ i % 5 }:This is line #${ i + 1 }`).join('\n');
+const startingText = [
+  ...Array.from({ length: 20 }, (_, i) => `${ i % 5 }:This is line #${ i + 1 }`),
+  '6:This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long.',
+  '1:This is line after the really long line.',
+].join('\n');
 
 class App extends React.Component {
   state = { text: startingText };
