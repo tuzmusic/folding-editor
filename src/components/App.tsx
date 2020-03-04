@@ -47,18 +47,18 @@ const startingText = [
 ].join('\n');
 
 class App extends React.Component {
-  state = { text: startingText };
+  state = { text: startingText, model: new TextEntryModel() };
   model: TextEntryModel = new TextEntryModel();
 
   constructor(props: any) {
     super(props);
-    this.model.setText(this.state.text);
+    this.state.model.setText(this.state.text);
   }
 
   changeText = (event: any) => {
     const text = event.target.value;
-    this.model.setText(text);
-    this.setState({ text: this.model.getText() });
+    this.state.model.setText(text);
+    this.setState({ text: this.state.model.getText() });
   };
 
   render = () => (
@@ -73,7 +73,7 @@ class App extends React.Component {
         </Editor>
       </EditorContainer>
       <TextDisplayContainer>
-        <TextDisplay lines={ this.model.lines }/>
+        <TextDisplay lines={ this.state.model.lines }/>
       </TextDisplayContainer>
     </Container>
   );

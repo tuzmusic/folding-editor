@@ -25,13 +25,13 @@ class TextDisplay extends React.Component<Props> {
           lines.map((line, i) => {
             // canFold means this can be folded, which is dependent on the lines BELOW
             // a line can be folded if the NEXT line has a greater indent level
-            let canFold = false;
-            if (i < lines.length - 1) {
-              const nextLine = lines[i + 1];
-              if (nextLine.indentLevel > line.indentLevel) canFold = true;
-            }
+            const nextLine = lines[i + 1];
+            const canFold = nextLine?.indentLevel > line.indentLevel;
             return <TextLineComponent
-              key={ i } line={ line } number={ i + 1 }
+              key={ i }
+              line={ line }
+              number={ i + 1 }
+              folded={ line.folded }
               canFold={ canFold }
             />;
           })
