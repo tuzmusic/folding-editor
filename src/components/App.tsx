@@ -1,6 +1,6 @@
 import React from 'react';
 import TextEntryModel from '../models/TextEntryModel';
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 import { FullWidthFlexDiv } from "./StyledComponents";
 import TextDisplay from "./TextDisplay";
 
@@ -26,7 +26,7 @@ const TextArea = styled.textarea({
   width: '100%',
   boxSizing: 'border-box',
   backgroundColor: 'transparent',
-  border: 'none'
+  border: 'none',
 });
 
 const EditorGutter = styled.div({
@@ -41,25 +41,23 @@ const Editor = styled.div({
 
 // endregion
 const startingText =
-  Array.from({ length: 20 }, (_, i) => {return `This is line #${ i + 1 }`}).join('\n');
-
-// 'one line of text \nanother line of text';
+  Array.from({ length: 20 }, (_, i) => `${ i % 5 }:This is line #${ i + 1 }`).join('\n');
 
 class App extends React.Component {
-  state = { text: startingText, };
+  state = { text: startingText };
   model: TextEntryModel = new TextEntryModel();
-  
+
   constructor(props: any) {
     super(props);
     this.model.setText(this.state.text);
   }
-  
+
   changeText = (event: any) => {
     const text = event.target.value;
     this.model.setText(text);
     this.setState({ text: this.model.getText() });
   };
-  
+
   render = () => (
     <Container>
       <EditorContainer>
