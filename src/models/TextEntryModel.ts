@@ -2,10 +2,12 @@ export class TextLine {
   text = '';
   indentLevel = 0;
 
-  constructor(text: string) {
-    this.text = text;
+  constructor(text?: string) {
+    this.text = text ?? '';
   }
 }
+
+type LineParserFunction = (text: string) => TextLine
 
 export class TextEntryModel {
   lines: TextLine[] = [];
@@ -16,8 +18,8 @@ export class TextEntryModel {
     this.lines = linesOfText.map(text => this.getColonSeparatedIndentLevel(text));
   };
 
-  getColonSeparatedIndentLevel(text: string): TextLine {
-    const line = new TextLine('');
+  getColonSeparatedIndentLevel: LineParserFunction = text => {
+    const line = new TextLine();
     const components = text.split(':');
     // if no colon
     if (components.length === 1) {
@@ -28,7 +30,7 @@ export class TextEntryModel {
       line.indentLevel = Number(components[0]);
     }
     return line;
-  }
+  };
 
   getText = (): string => this.lines.map(l => l.text).join('\n');
 
