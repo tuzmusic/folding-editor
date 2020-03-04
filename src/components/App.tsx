@@ -29,21 +29,8 @@ const TextArea = styled.textarea({
   border: 'none'
 });
 
-const Display = styled(FullWidthFlexDiv)({
-  backgroundColor: 'white',
-  boxSizing: 'border-box',
-  height: '100%',
-  padding: '5px',
-  flexDirection: 'column'
-});
-
 const EditorGutter = styled.div({
   backgroundColor: 'grey',
-  width: '20px',
-});
-
-const DisplayGutter = styled.div({
-  backgroundColor: 'black',
   width: '20px',
 });
 
@@ -53,7 +40,10 @@ const Editor = styled.div({
 });
 
 // endregion
-const startingText = 'one line of text \nanother line of text';
+const startingText =
+  Array.from({ length: 20 }, (_, i) => {return `This is line #${ i + 1 }`}).join('\n');
+
+// 'one line of text \nanother line of text';
 
 class App extends React.Component {
   state = { text: startingText, };
@@ -70,30 +60,22 @@ class App extends React.Component {
     this.setState({ text: this.model.getText() });
   };
   
-  render() {
-    return (
-      <Container>
-        <EditorContainer>
-          <EditorGutter/>
-          <Editor>
-            <TextArea
-              value={ this.state.text }
-              onChange={ this.changeText }
-            />
-          </Editor>
-        </EditorContainer>
-        <TextDisplayContainer>
-          <DisplayGutter/>
-          <TextDisplay lines={ this.model.lines }/>
-          {/*<Display>
-            { this.model.lines.map((line, i) =>
-              <div>({ line.indentLevel }) - { line.text }</div>)
-            }
-          </Display>*/ }
-        </TextDisplayContainer>
-      </Container>
-    );
-  }
+  render = () => (
+    <Container>
+      <EditorContainer>
+        <EditorGutter/>
+        <Editor>
+          <TextArea
+            value={ this.state.text }
+            onChange={ this.changeText }
+          />
+        </Editor>
+      </EditorContainer>
+      <TextDisplayContainer>
+        <TextDisplay lines={ this.model.lines }/>
+      </TextDisplayContainer>
+    </Container>
+  );
 }
 
 export default App;

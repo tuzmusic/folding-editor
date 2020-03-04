@@ -8,7 +8,6 @@ const Display = styled(FullWidthFlexDiv)({
   backgroundColor: 'white',
   boxSizing: 'border-box',
   height: '100%',
-  padding: '5px',
   flexDirection: 'column'
 });
 
