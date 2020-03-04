@@ -21,7 +21,7 @@ class TextDisplay extends React.Component<Props> {
     <Display>
       {
         this.props.lines.map((line, i) =>
-          <TextLineComponent line={ line } number={ i + 1 }/>)
+          <TextLineComponent key={ i } line={ line } number={ i + 1 }/>)
       }
     </Display>
   )
