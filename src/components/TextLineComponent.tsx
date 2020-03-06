@@ -31,20 +31,26 @@ type Props = {
   number: number
   canFold: boolean
   folded: boolean
+  updateModel: Function
 }
 
 const indentSpaces = 4;
 
 class TextLineComponent extends React.Component<Props> {
+  foldLine = () => {
+    const { line, updateModel } = this.props;
+    line.fold();
+    updateModel(line.model);
+  };
 
   render = () => {
-    const { line, canFold, folded } = this.props;
+    const { line, canFold, folded, updateModel } = this.props;
     return (
       <LineContainer>
         <LineGutter
           canFold={ canFold }
           folded={ folded }
-          onClick={ canFold ? line.fold : () => {} }
+          onClick={ canFold ? this.foldLine : () => {} }
         >{ line.indentLevel }</LineGutter>
         <LineText>{
           folded ? "..." :

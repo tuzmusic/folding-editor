@@ -48,7 +48,6 @@ const startingText = [
 
 class App extends React.Component {
   state = { text: startingText, model: new TextEntryModel() };
-  model: TextEntryModel = new TextEntryModel();
 
   constructor(props: any) {
     super(props);
@@ -73,7 +72,10 @@ class App extends React.Component {
         </Editor>
       </EditorContainer>
       <TextDisplayContainer>
-        <TextDisplay lines={ this.state.model.lines }/>
+        <TextDisplay
+          lines={ this.state.model.lines }
+          updateModel={ (model: TextEntryModel) => this.setState({ model }) }
+        />
       </TextDisplayContainer>
     </Container>
   );

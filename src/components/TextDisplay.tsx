@@ -13,12 +13,13 @@ const Display = styled(FullWidthFlexDiv)({
 
 type Props = {
   lines: TextLine[]
+  updateModel: Function
 }
 
 class TextDisplay extends React.Component<Props> {
 
   render = () => {
-    const { lines } = this.props;
+    const { lines, updateModel } = this.props;
     return (
       <Display>
         {
@@ -33,6 +34,7 @@ class TextDisplay extends React.Component<Props> {
               number={ i + 1 }
               folded={ line.folded }
               canFold={ canFold }
+              updateModel={ updateModel }
             />;
           })
         }
