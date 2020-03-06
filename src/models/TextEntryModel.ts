@@ -38,7 +38,6 @@ export class TextEntryModel {
     for (let i = index + 1; i < this.lines.length; i++) {
       const thisLine = this.lines[i];
       if (thisLine.indentLevel > previousIndentLevel) {
-        // thisLine.folded = true;
         thisLine.folded = !thisLine.folded;
       } else {
         return; // if we've reached a line with the same indent level, we're done.

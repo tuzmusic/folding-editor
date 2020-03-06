@@ -15,7 +15,10 @@ const LineGutter = styled.div<{ canFold: boolean, folded: boolean }>(({
   paddingRight: '4px',
   boxSizing: 'border-box',
   userSelect: 'none',
-}), ({ canFold, folded }) => ({ color: canFold ? 'red' : (folded ? 'blue' : 'black') }));
+}), ({ canFold, folded }) => ({
+  color:
+    folded ? 'red' : canFold ? 'black' : 'grey',
+}));
 
 const LineText = styled.div({
   display: 'inline',
@@ -44,17 +47,16 @@ class TextLineComponent extends React.Component<Props> {
   };
 
   render = () => {
-    const { line, canFold, folded, updateModel } = this.props;
-    return (
+    const { line, canFold, folded } = this.props;
+    return folded ? null : (
       <LineContainer>
         <LineGutter
           canFold={ canFold }
           folded={ folded }
           onClick={ canFold ? this.foldLine : () => {} }
-        >{ line.indentLevel }</LineGutter>
+        >{ canFold && '+' }</LineGutter>
         <LineText>{
-          folded ? "..." :
-            Array(line.indentLevel * indentSpaces).fill(' ').join('') + line.text
+          Array(line.indentLevel * indentSpaces).fill(' ').join('') + line.text
         }</LineText>
       </LineContainer>
     );
