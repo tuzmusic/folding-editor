@@ -2,7 +2,10 @@ import React from 'react';
 import TextEntryModel from '../models/TextEntryModel';
 import styled from '@emotion/styled';
 import { FullWidthFlexDiv } from "./StyledComponents";
+import { connect } from 'react-redux';
 import TextDisplay from "./TextDisplay";
+import { AppState } from '../index';
+import { setModelText } from '../redux/reducers/model.slice';
 
 // region
 const Container = styled(FullWidthFlexDiv)({
@@ -46,19 +49,33 @@ const startingText = [
   '1:This is line after the really long line.',
 ].join('\n');
 
-class App extends React.Component {
-  state = { text: startingText, model: new TextEntryModel() };
-  model: TextEntryModel = new TextEntryModel();
+const selectProps = ({ model }: AppState) => ({ model });
+const actions = { setModelText };
+
+type Props = {
+  model: TextEntryModel
+  setModelText: (text: string) => void
+}
+
+class App extends React.Component<Props> {
+  // state = { text: startingText, model: new TextEntryModel() };
+  // model: TextEntryModel = new TextEntryModel();
 
   constructor(props: any) {
     super(props);
-    this.state.model.setText(this.state.text);
+    // this.state.model.setText(this.state.text);
   }
 
   changeText = (event: any) => {
     const text = event.target.value;
-    this.state.model.setText(text);
-    this.setState({ text: this.state.model.getText() });
+    // this.state.model.setText(text);
+    // this.setState({ text: this.state.model.getText() });
+  };
+
+  componentDidMount = () => {
+    console.log(this.props.model.lines.length);
+    if (!this.props.model.lines.length)
+      this.props.setModelText(startingText);
   };
 
   render = () => (
@@ -67,16 +84,16 @@ class App extends React.Component {
         <EditorGutter/>
         <Editor>
           <TextArea
-            value={ this.state.text }
+            value={ this.props.model.getText() }
             onChange={ this.changeText }
           />
         </Editor>
       </EditorContainer>
       <TextDisplayContainer>
-        <TextDisplay lines={ this.state.model.lines }/>
+        <TextDisplay lines={ this.props.model.lines }/>
       </TextDisplayContainer>
     </Container>
   );
 }
 
-export default App;
+export default connect(selectProps, actions)(App);

@@ -15,7 +15,7 @@ export class TextLine {
 
   fold = () => {
     this.model.foldLineAtIndex(this.index);
-    console.table(this.model.lines.map((line, i) => line.folded));
+    // console.table(this.model.lines.map((line, i) => line.folded));
   };
 }
 
