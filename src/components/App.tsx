@@ -3,6 +3,9 @@ import TextEntryModel from '../models/TextEntryModel';
 import styled from '@emotion/styled';
 import { FullWidthFlexDiv } from "./StyledComponents";
 import TextDisplay from "./TextDisplay";
+import sampleText from '../fixtures/sample';
+//@ts-ignore
+import Twain from 'mark-twain';
 
 // region
 const Container = styled(FullWidthFlexDiv)({
@@ -19,6 +22,7 @@ const EditorContainer = styled(FullWidthFlexDiv)({
 const TextDisplayContainer = styled(FullWidthFlexDiv)({
   flex: 1,
   border: 'solid black thin',
+  flexDirection: 'column',
 });
 
 const TextArea = styled.textarea({
@@ -47,11 +51,12 @@ const startingText = [
 ].join('\n');
 
 class App extends React.Component {
-  state = { text: startingText, model: new TextEntryModel() };
+  state = { text: sampleText, model: new TextEntryModel(), markdown: [] as any[] };
 
   constructor(props: any) {
     super(props);
     this.state.model.setText(this.state.text);
+    this.state.markdown = Twain(sampleText).content.slice(1); // content[0] is "article"
   }
 
   changeText = (event: any) => {
@@ -72,10 +77,7 @@ class App extends React.Component {
         </Editor>
       </EditorContainer>
       <TextDisplayContainer>
-        <TextDisplay
-          lines={ this.state.model.lines }
-          updateModel={ (model: TextEntryModel) => this.setState({ model }) }
-        />
+        <TextDisplay lines={ this.state.markdown }/>
       </TextDisplayContainer>
     </Container>
   );

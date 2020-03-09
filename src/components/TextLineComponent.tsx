@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from "@emotion/styled";
-import { TextLine } from "../models/TextEntryModel";
 
 const LineContainer = styled.div({
   display: 'flex',
 });
 
-const LineGutter = styled.div<{ canFold: boolean, folded: boolean }>(({
-  display: 'inline-block',
+const LineGutter = styled.div<{ canFold?: boolean, folded?: boolean }>(({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   borderRight: 'solid thin black',
   minWidth: '25px',
   textAlign: 'center',
@@ -30,33 +31,25 @@ const LineText = styled.div({
 });
 
 type Props = {
-  line: TextLine
+  line: string[]
   number: number
-  canFold: boolean
-  folded: boolean
-  updateModel: Function
+  // canFold: boolean
+  // folded: boolean
+  // updateModel: Function
 }
 
 const indentSpaces = 4;
 
 class TextLineComponent extends React.Component<Props> {
-  foldLine = () => {
-    const { line, updateModel } = this.props;
-    line.fold();
-    updateModel(line.model);
-  };
 
   render = () => {
-    const { line, canFold, folded } = this.props;
-    return folded ? null : (
+    const { line: [tag, content], number } = this.props;
+    return (
       <LineContainer>
         <LineGutter
-          canFold={ canFold }
-          folded={ folded }
-          onClick={ canFold ? this.foldLine : () => {} }
-        >{ canFold && '+' }</LineGutter>
+        >{ number }</LineGutter>
         <LineText>{
-          Array(line.indentLevel * indentSpaces).fill(' ').join('') + line.text
+          React.createElement(tag, { children: content })   // recursion goes here!
         }</LineText>
       </LineContainer>
     );
