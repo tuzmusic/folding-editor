@@ -44,11 +44,6 @@ const Editor = styled.div({
 });
 
 // endregion
-const startingText = [
-  ...Array.from({ length: 20 }, (_, i) => `${ i % 5 }:This is line #${ i + 1 }`),
-  '6:This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long. This line is really long.',
-  '1:This is line after the really long line.',
-].join('\n');
 
 class App extends React.Component {
   state = { text: sampleText, model: new TextEntryModel(), markdown: [] as any[] };
@@ -57,6 +52,7 @@ class App extends React.Component {
     super(props);
     this.state.model.setText(this.state.text);
     this.state.markdown = Twain(sampleText).content.slice(1); // content[0] is "article"
+    console.log(this.state.markdown);
   }
 
   changeText = (event: any) => {
@@ -67,7 +63,7 @@ class App extends React.Component {
 
   render = () => (
     <Container>
-      <EditorContainer>
+      {/* <EditorContainer>
         <EditorGutter/>
         <Editor>
           <TextArea
@@ -75,7 +71,7 @@ class App extends React.Component {
             onChange={ this.changeText }
           />
         </Editor>
-      </EditorContainer>
+      </EditorContainer>*/ }
       <TextDisplayContainer>
         <TextDisplay lines={ this.state.markdown }/>
       </TextDisplayContainer>
