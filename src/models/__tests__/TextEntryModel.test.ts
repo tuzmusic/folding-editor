@@ -1,4 +1,4 @@
-import TextEntryModel from './TextEntryModel';
+import TextEntryModel from '../TextEntryModel';
 
 describe('TextEntryModel', () => {
   describe('setText', () => {
