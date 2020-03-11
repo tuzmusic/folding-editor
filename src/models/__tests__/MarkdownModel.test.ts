@@ -17,6 +17,7 @@ describe('flat tree creation', () => {
     
     expect(parseFlatTextTree(singleItemStack)).toEqual(expected);
   });
+
   it('can parse a simple tree of body elements', () => {
     const textStack: TwainTextNode[] = [
       ["p", "first line"],
