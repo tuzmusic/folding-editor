@@ -36,9 +36,9 @@ function addChildNode(child: MarkdownNode, parent: MarkdownNode) {
   child.parent = parent;
 }
 
-function addToPrevNodeParent(node: MarkdownNode, prevNode: MarkdownNode): boolean {
-  if (prevNode.parent) {
-    addChildNode(node, prevNode.parent);
+function addSiblingNode(nodeToAdd: MarkdownNode, destNode: MarkdownNode): boolean {
+  if (destNode.parent) {
+    addChildNode(nodeToAdd, destNode.parent);
     return true;
   }
   return false;
@@ -66,6 +66,7 @@ export function parseFlatTextTree(textStack: TwainTextNode[]): MarkdownStack {
     // assign the node's parent (or push it to the stack with no parent)
 
     // if this is the first node, add it and we're done
+    // (don't assign a parent)
     if (markdownStack.length === 0) {
       markdownStack.push(currentNode);
       continue;
@@ -76,14 +77,38 @@ export function parseFlatTextTree(textStack: TwainTextNode[]): MarkdownStack {
     // if the previous node doesn't accept children (i.e., it's a body node)
     // we can just add this node as a sibling of prev node
     if (isBodyNode(prevNode)) {
-      addToPrevNodeParent(currentNode, prevNode) || markdownStack.push(currentNode);
+      addSiblingNode(currentNode, prevNode) || markdownStack.push(currentNode);
       continue;
     }
 
     if (isHeaderNode(prevNode)) {
       if (isBodyNode(currentNode)) {
-
+        // find the next header node (keep traversing)
       } else if (isHeaderNode(currentNode)) {
+        // all we have to go on is the previous node!
+        /* This is probably the start of what will be extracted into a recursive function */
+        const currentLevel = headerLevel(currentNode);
+        const testLevel = headerLevel(prevNode);
+
+        if (testLevel === currentLevel) {
+          /* RECURSIVE BASE CASE (?) SUCCESS */
+          // if they're the same level, add this node as a sibling of that node
+          addSiblingNode(currentNode, prevNode);
+        } else if (testLevel < currentLevel) {
+          /* RECURSIVE BASE CASE (?) SUCCESS */
+          // if the test node is less indented than our node
+          // add our node as a child of that node
+          addChildNode(currentNode, prevNode);
+        } else if (testLevel > currentLevel) {
+          // if the test node is more indented than our node,
+          // keep looking
+        }
+        // traverse the previous node's lineage
+        // when we find a parent whose header number is less than
+        // the CURRENT (?) header number
+        // add this node to that node's children
+        // if we never find such a parent
+        // add to the initial stack
 
       }
 
@@ -91,8 +116,7 @@ export function parseFlatTextTree(textStack: TwainTextNode[]): MarkdownStack {
       // if the prev node has no parent, we can add the current node to it
       // (we've reached the top level minus the stack itself)
       if (!prevNode.parent) {
-        addChildNode(currentNode, prevNode); // one recursive base case? (return prevNode)
-
+        // addChildNode(currentNode, prevNode); // one recursive base case? (return prevNode)
       }
 
       // traverse the previous node's lineage

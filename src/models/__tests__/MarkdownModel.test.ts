@@ -14,7 +14,7 @@ describe('flat tree creation', () => {
     ];
     const expected: LooseMarkdownStack =
       simpleNodes([{ tag: "p", text: "only line" }]);
-    
+
     expect(parseFlatTextTree(singleItemStack)).toEqual(expected);
   });
 
@@ -52,4 +52,4 @@ describe('flat tree creation', () => {
     expect(p.parent).toEqual(h2);
 
   });
-  ;
+});
