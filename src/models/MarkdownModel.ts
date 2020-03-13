@@ -1,6 +1,7 @@
 //@ts-ignore
 import Twain from 'mark-twain';
 
+//region Types/Enums
 export type MarkdownStack = MarkdownNode[]
 export type MarkdownNode = {
   tag: string
@@ -23,16 +24,21 @@ enum HeaderTags {
 export type TwainTextChildNode = ["p", string] | string[];
 export type TwainTextParentNode = ["h1" | "h2" | "h3" | "h4", string] | string[];
 export type TwainTextNode = TwainTextChildNode | TwainTextParentNode
+//endregion
 
 const isHeaderNode = (node: MarkdownNode): boolean =>
   Object.keys(HeaderTags).includes(node.tag);
 const isBodyNode = (node: MarkdownNode): boolean =>
   Object.keys(ChildlessTags).includes(node.tag);
 
+function addChildNode(child: MarkdownNode, parent: MarkdownNode) {
+  parent.children.push(child);
+  child.parent = parent;
+}
+
 function addToPrevNodeParent(node: MarkdownNode, prevNode: MarkdownNode): boolean {
   if (prevNode.parent) {
-    prevNode.parent!.children.push(node);
-    node.parent = prevNode.parent;
+    addChildNode(node, prevNode.parent);
     return true;
   }
   return false;
@@ -67,43 +73,37 @@ export function parseFlatTextTree(textStack: TwainTextNode[]): MarkdownStack {
 
     const prevNode = markdownStack[markdownStack.length - 1];
 
-    // if the previous node doesn't accept children
+    // if the previous node doesn't accept children (i.e., it's a body node)
     // we can just add this node as a sibling of prev node
     if (isBodyNode(prevNode)) {
       addToPrevNodeParent(currentNode, prevNode) || markdownStack.push(currentNode);
-    } else if (isHeaderNode(prevNode)) {
-      /*
-if this is a header node
-  traverse the previous node's lineage
-  when we find a parent whose header number is less than this header number
-  add this node to that node's children
-  if we never find such a parent
-    add to the initial stack
-
-and then we're done? add node to stack, i guess?
-
-* */
-
+      continue;
     }
 
-    /*
-    if this is the first node
-      parent = null
-      push onto stack
-    else get previous node
-     */
-    /*
-    ADD_TO_PREVNODE_PARENT:
-      if previous node has no parent
-          add this node to stack
-        else
-          add this node to previous node's parent
-     */
-    /*
-    if this is a body node
-      if previous node is a body node ADD_TO_PREVNODE_PARENT
-     */
+    if (isHeaderNode(prevNode)) {
+      if (isBodyNode(currentNode)) {
 
+      } else if (isHeaderNode(currentNode)) {
+
+      }
+
+      /* THIS MIGHT NOT BE RIGHT. OR, IT MIGHT BE RIGHT BUT ONLY FOR BODY NODE? */
+      // if the prev node has no parent, we can add the current node to it
+      // (we've reached the top level minus the stack itself)
+      if (!prevNode.parent) {
+        addChildNode(currentNode, prevNode); // one recursive base case? (return prevNode)
+
+      }
+
+      // traverse the previous node's lineage
+      // when we find a parent whose header number is less than this header number
+      // add this node to that node's children
+      // if we never find such a parent
+      // add to the initial stack
+
+      // and then we're done? add node to stack, i guess?
+
+    }
   }
   return markdownStack;
 }

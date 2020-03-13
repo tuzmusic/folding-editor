@@ -29,7 +29,27 @@ describe('flat tree creation', () => {
       { tag: "p", text: "second line" },
       { tag: "p", text: "third line" },
     ]);
-    
+
     expect(parseFlatTextTree(textStack)).toEqual(markdownStack);
   });
-});
+
+  it('can parse headers', () => {
+    const headerStack: TwainTextNode[] = [
+      ["h1", "header 1"],
+      ["h2", "header 2"],
+      ["p", "text"],
+    ];
+
+    const parsed = parseFlatTextTree(headerStack);
+    expect(parsed.length).toEqual(1);
+
+    const h1 = parsed[0];
+    expect(h1.children.length).toEqual(1);
+    const h2 = h1.children[0];
+    expect(h2.parent).toEqual(h1);
+    expect(h2.children.length).toEqual(1);
+    const p = h2.children[0];
+    expect(p.parent).toEqual(h2);
+
+  });
+  ;
