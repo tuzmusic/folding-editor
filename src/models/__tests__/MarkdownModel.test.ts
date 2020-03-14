@@ -42,7 +42,7 @@ describe('flat tree creation', () => {
 
     const parsed = parseFlatTextTree(headerStack);
     expect(parsed.length).toEqual(1);
-
+  
     const h1 = parsed[0];
     expect(h1.children.length).toEqual(1);
     const h2 = h1.children[0];
@@ -50,6 +50,10 @@ describe('flat tree creation', () => {
     expect(h2.children.length).toEqual(1);
     const p = h2.children[0];
     expect(p.parent).toEqual(h2);
-
+  
   });
+  
+  it('can parse more complex headers', () => {
+  
+  })
 });
