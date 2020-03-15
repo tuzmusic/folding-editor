@@ -62,7 +62,7 @@ describe('flat tree creation', () => {
     h1
       h3
         p
-      h2
+      h2   <-- still comes after the h3, as its sibling
         p
         p
         p
