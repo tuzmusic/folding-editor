@@ -1,5 +1,4 @@
 //@ts-ignore
-import Twain from 'mark-twain';
 
 //region Types/Enums
 export type MarkdownStack = MarkdownNode[]
@@ -19,6 +18,8 @@ enum HeaderTags {
   h2 = "h2",
   h3 = "h3",
   h4 = "h4",
+  h5 = "h5",
+  h6 = "h6",
 }
 
 export type TwainTextChildNode = ["p", string] | string[];
@@ -83,130 +84,26 @@ export function parseFlatTextTree(textStack: TwainTextNode[]): MarkdownStack {
       children: [],
       parent: null,
     };
-      
-      // assign the node's parent (or push it to the stack, with no parent)
-      
-      // if this is the first node, add it and we're done (no parent)
-      if (i === 0) return markdownStack.push(currentNode);
-      
-      // get the last available parent node from the tree
-      const lastTextNode = markdownStack[markdownStack.length - 1];
-      const prevNode = getLastParent(lastTextNode);
-      
-      if (isBodyNode(currentNode) && isBodyNode(prevNode)) {
-        console.log("BODY BODY");
-        // if the previous node doesn't accept children (i.e., it's a body node)
-        // we can just add this node as a sibling of prev node
-        return addSiblingNode(currentNode, prevNode) //|| markdownStack.push(currentNode);
-      }
-    
-    if (isBodyNode(currentNode) && isHeaderNode(prevNode)) {
-      console.log("BODY HEADER");
-      // a body node following a header node
-      // simply belongs under that header
-      return addChildNode(currentNode, prevNode);
+  
+    // assign the node's parent (or push it to the stack, with no parent)
+  
+    // if this is the first node, add it and we're done (no parent)
+    if (i === 0) return markdownStack.push(currentNode);
+  
+    // get the last available parent node from the tree
+    const lastTextNode = markdownStack[markdownStack.length - 1];
+    const lastParentNode = getLastParent(lastTextNode);
+  
+    if (isBodyNode(currentNode)) {
+      // a body node gets added to the last available header
+      // TODO: Is there a way to add a body as a younger sibling of a header???
+      return addChildNode(currentNode, lastParentNode);
     }
-    
-    if (isHeaderNode(currentNode) && isHeaderNode(prevNode)) {
-      // BASE CASE 1
-      // if prev.level < current.level
-      //   prev.addChild(current)
-      // BASE CASE 2
-      // if prev.level === current.level
-      //   prev.addSibling(current)
-      // RECURSION CASE
-      // if prev.level > current.level
-      //
-      console.log("HEADER HEADER");
-      return addHeaderNodeAfterHeaderNode(currentNode, prevNode);
+  
+    if (isHeaderNode(currentNode)) {
+      return addHeaderNodeAfterHeaderNode(currentNode, lastParentNode);
     }
-    
-    if (isHeaderNode(currentNode) && isBodyNode(prevNode)) {
-      console.log("HEADER BODY");
-      
-      return addHeaderNodeAfterHeaderNode(currentNode, prevNode.parent!);
-    }
-    return;
-    if (isHeaderNode(prevNode)) {
-      if (isBodyNode(currentNode)) {
-        // find the next header node (keep traversing)
-      } else if (isHeaderNode(currentNode)) {
-        /* This is probably the start of what will be extracted into a recursive function */
-        const currentLevel = headerLevel(currentNode);
-        const testLevel = headerLevel(prevNode);
-        
-        if (testLevel === currentLevel) {
-          /* RECURSIVE BASE CASE (?) SUCCESS */
-            // if they're the same level, add this node as a sibling of that node
-            addSiblingNode(currentNode, prevNode);
-          } else if (testLevel < currentLevel) {
-            /* RECURSIVE BASE CASE (?) SUCCESS */
-            // if the test node is less indented than our node,
-            // we've found our parent!
-            // add our node as a child of that node
-            addChildNode(currentNode, prevNode);
-          } else if (testLevel > currentLevel) {
-            // if the test node is more indented than our node,
-            // keep looking
-          }
-          // traverse the previous node's lineage
-          // when we find a parent whose header number is less than
-          // the CURRENT (?) header number
-          // add this node to that node's children
-          // if we never find such a parent
-          // add to the initial stack
-          
-        }
-        
-        /* THIS MIGHT NOT BE RIGHT. OR, IT MIGHT BE RIGHT BUT ONLY FOR BODY NODE? */
-        // if the prev node has no parent, we can add the current node to it
-        // (we've reached the top level minus the stack itself)
-        // if (!prevNode.parent) {
-        //   addChildNode(currentNode, prevNode); // one recursive base case? (return prevNode)
-        // }
-        
-        // traverse the previous node's lineage
-        // when we find a parent whose header number is less than this header number
-        // add this node to that node's children
-        // if we never find such a parent
-        // add to the initial stack
-        
-        // and then we're done? add node to stack, i guess?
-        
-      }
-    }
-  );
+  
+  });
   return markdownStack;
 }
-
-const parseNode = ([tag, content]: [string, any], tree: MarkdownNode[]): MarkdownNode => {
-  // construct the node.
-  
-  // we'll always start with the tag name
-  const node: Partial<MarkdownNode> = { tag };
-  
-  // if the content is just a string, we have a simple node
-  if (typeof content === 'string') {
-    node.text = content;
-    // check our own indent-level table to determine nesting of nodes
-  } else if (Array.isArray(content)) {
-  
-  }
-  
-  return node as MarkdownNode;
-};
-
-const createMarkdownTree = (text: string) => {
-  // parse text into markdown tree with Mark Twain
-  const startingTree: [string, any][] = Twain(text).content.slice(1); // remove content[0] which is "article"
-  
-  // create tree
-  const tree: MarkdownNode[] = [];
-  
-  startingTree.forEach(node => {
-    // construct the node, and its children (recursively)
-    const parsedNode = parseNode(node, tree);
-    tree.push(parsedNode);
-  });
-  
-};
