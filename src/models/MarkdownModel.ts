@@ -9,11 +9,11 @@ export type MarkdownNode = {
   parent: MarkdownNode | null
 }
 
-enum ChildlessTags {
+export enum ChildlessTags {
   p = "p"
 }
 
-enum HeaderTags {
+export enum HeaderTags {
   h1 = "h1",
   h2 = "h2",
   h3 = "h3",
@@ -53,11 +53,9 @@ export function parseFlatTextTree(textStack: TwainTextNode[]): MarkdownStack {
   function addSiblingNode(nodeToAdd: MarkdownNode, destNode: MarkdownNode): void {
     if (destNode.parent) {
       addChildNode(nodeToAdd, destNode.parent);
-      // return true;
     } else {
       markdownStack.push(nodeToAdd)
     }
-    // return false;
   }
   
   function addHeaderNodeAfterHeaderNode(curr: MarkdownNode, prev: MarkdownNode): void {
