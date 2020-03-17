@@ -31,30 +31,13 @@ export class FoldingDocument {
       // get this BEFORE we add the current node (which could be the first node)
       const { lowestRoot } = this;
   
-      // adds to ALL nodes
-      // the rest of this method will assign children (parents),
-      // which will indeed be "the tree", but the tree is simply
-      // all the nodes who haven't been assigned parents
-      // (which contain all the branches/leaves/child nodes, or are just single body nodes)
-      // which is retrievable as this.tree
+      // note that this is the list of all nodes,
+      // as opposed to this.tree (which is only the roots)
       this.nodes.push(node);
   
-      // if there are roots on the tree, get the lowest root
+      // get the lowest root, if there is one,
       // and add this node as its lowest child.
-      // note that this means that body nodes can only be added
-      // at the root of the tree if there are no preceding roots.
-      if (lowestRoot) {
-        lowestRoot.addToLowestChild(node);
-    
-        /*        if (node instanceof BodyNode) {
-                  lowestRoot.addChildNode(node) // assigns the parent
-                } else if (node instanceof HeaderNode) {
-                  // finds the appropriate parent **within the lastParentNode**
-                  // and adds this node to its children, assigning this node's parent.
-                  lowestRoot.addToLowestChild(node)
-                }*/
-      }
-  
+      lowestRoot?.addToLowestHeaderChild(node);
     })
   }
   
