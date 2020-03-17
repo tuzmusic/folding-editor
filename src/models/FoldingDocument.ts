@@ -1,7 +1,5 @@
-import { MarkdownNode } from "./MarkdownNode";
+import { HeaderNode, MarkdownNode } from "./MarkdownNode";
 import { TwainTextNode } from "./MarkdownModel";
-import { HeaderNode } from "./HeaderNode";
-import { BodyNode } from "./BodyNode";
 
 export class FoldingDocument {
   sourceText: string = "";
@@ -10,9 +8,10 @@ export class FoldingDocument {
   
   get tree(): MarkdownNode[] { return this.nodes.filter(node => !node.parent) }
   
-  get lastParentNode(): HeaderNode | undefined {
+  get lowestRoot(): HeaderNode | undefined {
     // step backward through the tree until we find a header node
-    for (let node of [...this.tree].reverse())
+    let reversedTree = [...this.tree].reverse();
+    for (let node of reversedTree)
       if (node instanceof HeaderNode) return node as HeaderNode
   }
   
@@ -27,11 +26,11 @@ export class FoldingDocument {
   
   parseTree = () => {
     this.twainNodes.forEach(([tag, text]) => {
-      const node = new MarkdownNode(tag, text, this);
-      
+      const node = MarkdownNode.create(tag, text, this);
+  
       // get this BEFORE we add the current node (which could be the first node)
-      const { lastParentNode } = this;
-      
+      const { lowestRoot } = this;
+  
       // adds to ALL nodes
       // the rest of this method will assign children (parents),
       // which will indeed be "the tree", but the tree is simply
@@ -39,18 +38,23 @@ export class FoldingDocument {
       // (which contain all the branches/leaves/child nodes, or are just single body nodes)
       // which is retrievable as this.tree
       this.nodes.push(node);
-      
-      // if there's no header on the tree, this latest node can't have a parent,
-      // so after we've added the node to the tree, we're done.
-      if (!lastParentNode) return;
-      
-      if (node instanceof BodyNode) {
-        lastParentNode.addChildNode(node) // assigns the parent
-      } else if (node instanceof HeaderNode) {
-        // finds the appropriate parent within the lastParentNode
-        // and adds this node to its children, assigning this node's parent.
-        node.addAfterHeaderNode(lastParentNode)
+  
+      // if there are roots on the tree, get the lowest root
+      // and add this node as its lowest child.
+      // note that this means that body nodes can only be added
+      // at the root of the tree if there are no preceding roots.
+      if (lowestRoot) {
+        lowestRoot.addToLowestChild(node);
+    
+        /*        if (node instanceof BodyNode) {
+                  lowestRoot.addChildNode(node) // assigns the parent
+                } else if (node instanceof HeaderNode) {
+                  // finds the appropriate parent **within the lastParentNode**
+                  // and adds this node to its children, assigning this node's parent.
+                  lowestRoot.addToLowestChild(node)
+                }*/
       }
+  
     })
   }
   
