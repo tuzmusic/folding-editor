@@ -127,8 +127,13 @@ describe('object oriented', () => {
 13    h1
     */
   
-    const tree = FoldingDocument.fromTwainNodes(basicStack1).tree;
+    const doc = FoldingDocument.fromTwainNodes(basicStack1);
+    const tree = doc.tree;
     expect(tree.length).toEqual(3);
+  
+    expect(
+      doc['nodes'].every(node => node.text != "")
+    ).toBe(true);
   
     const [h1a, h1b, h1c] = tree as HeaderNode[];
     const [h3a, h2b, h2c] = h1b.children as HeaderNode[];
