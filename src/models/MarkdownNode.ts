@@ -65,13 +65,16 @@ export class HeaderNode extends MarkdownNode {
           this.lowestHeaderChild.addSibling(node);
       /* THIS ISN'T NEEDED! THAT MEANS THERE'S NO RECURSION!! WHAT?!?!? */
       /* Well, we always call this on a root.
-      * Nothing has a lower header level than a root.
+      * Nothing has a lower header level than a root. todo: <--- THIS DEPENDS ON WHAT THE ROOT IS!
       * The recursion only happens inside of this.lowestHeaderChild.
       * Theoretically this probably means we could have written that method's
       * recursion into this one. But hey, look at the name of this method anyway!
       * todo: does this break separation of concerns?
       *  (node shouldn't know how its document builds itself?)
-      *  (which would mean we keep it?)
+      *  (which would mean we keep the recursion?)
+      *  (as well as the deleted case of !this.parent,
+      *   which perhaps could return false instead of dealing
+      *   with it directly)
       * */
       // RECURSION CASE
       // if (this.headerLevel > node.headerLevel)

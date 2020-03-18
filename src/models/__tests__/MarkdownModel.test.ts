@@ -1,6 +1,7 @@
 import { MarkdownNode, MarkdownStack, parseFlatTextTree, TwainTextNode } from "../MarkdownModel";
 import { FoldingDocument } from "../FoldingDocument";
 import { HeaderNode } from "../MarkdownNode";
+import { basicStack1 } from "./twainStacks";
 
 type LooseMarkdownStack = Partial<MarkdownNode>[]
 
@@ -125,21 +126,16 @@ describe('object oriented', () => {
 11        h6
 13    h1
     */
-    const levels = [1, 2, 3, 1, 3, 0, 2, 0, 0, 0, 2, 0, 6, 1];
-    const stack: TwainTextNode[] = levels.map((num, i) => {
-      const tag = num === 0 ? "p" : `h${ num }`;
-      return [tag, `${ i }. this is a ${ tag }`]
-    });
-    
-    const tree = FoldingDocument.fromTwainNodes(stack).tree;
+  
+    const tree = FoldingDocument.fromTwainNodes(basicStack1).tree;
     expect(tree.length).toEqual(3);
-    
+  
     const [h1a, h1b, h1c] = tree as HeaderNode[];
     const [h3a, h2b, h2c] = h1b.children as HeaderNode[];
-    
+  
     expect(h1a.children.length).toEqual(1);
     expect(h1b.children.length).toEqual(3);
-    
+  
     let h1aChild = h1a.children[0] as HeaderNode;
     expect(h1aChild).toBeInstanceOf(HeaderNode);
     expect(h1aChild.parent).toEqual(h1a);

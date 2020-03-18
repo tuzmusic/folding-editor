@@ -8,21 +8,21 @@ export class FoldingDocument {
   
   get tree(): MarkdownNode[] { return this.nodes.filter(node => !node.parent) }
   
-  get lowestRoot(): HeaderNode | undefined {
+  get lowestRoot(): HeaderNode | null {
     // step backward through the tree until we find a header node
     let reversedTree = [...this.tree].reverse();
     for (let node of reversedTree)
-      if (node instanceof HeaderNode) return node as HeaderNode
+      if (node instanceof HeaderNode) return node as HeaderNode;
+    return null;
   }
   
   static fromTwainNodes = (twainNodes: TwainTextNode[]) => {
     const doc = new FoldingDocument();
     doc.twainNodes = twainNodes;
-    doc.parseTree();
+    doc.parseTree(); // construct/populate all the nodes
     return doc;
   };
   
-  addNode = (node: MarkdownNode) => this.nodes.push(node);
   
   parseTree = () => {
     this.twainNodes.forEach(([tag, text]) => {
@@ -37,6 +37,8 @@ export class FoldingDocument {
   
       // get the lowest root, if there is one,
       // and add this node as its lowest child.
+      // note: for a root node, this will actually "fall through"
+      // and do nothing (in node.addSibling)
       lowestRoot?.addToLowestHeaderChild(node);
     })
   }
