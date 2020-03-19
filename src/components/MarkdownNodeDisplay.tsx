@@ -1,30 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HeaderNode, MarkdownNode } from "../models/MarkdownNode";
 import styled from "@emotion/styled";
 
-type Props = { node: MarkdownNode }
+type Props = {
+  node: MarkdownNode
+  indentLevel: number
+}
 
-function renderNode(node: MarkdownNode) {
+const renderChildren = (node: HeaderNode, indentLevel: number) =>
+  node.children.map((child, i) =>
+    <NodeDisplay node={ child } indentLevel={ indentLevel + 1 } key={ i }/>
+  );
+
+const NodeDisplay = ({ node, indentLevel }: Props) => {
+  
+  const [folded, setFolded] = useState(false);
   const { tag, text } = node;
-  const StyledNode = styled(tag)({
+  
+  const toggleFolded = () => setFolded(!folded);
+  
+  const StyledNode = styled(tag)<{ indentLevel: number }>(({
     ':hover': {
       textDecoration: node instanceof HeaderNode ? 'underline' : 'none',
     }
-  });
+  }), ({ indentLevel }) => ({ marginLeft: indentLevel * 10 }));
   
-  return <StyledNode>{ text }</StyledNode>;
-}
-
-const renderChildren = (node: HeaderNode) =>
-  node.children.map((child, i) =>
-    <NodeDisplay node={ child } key={ i }/>
-  );
-
-const NodeDisplay = ({ node }: Props) =>
-  <div>
-    { renderNode(node) }
-    { node instanceof HeaderNode && renderChildren(node) }
+  return <div>
+    <StyledNode indentLevel={ indentLevel } onClick={ toggleFolded }>
+      { text }
+    </StyledNode>
+    { !folded && node instanceof HeaderNode && renderChildren(node, indentLevel) }
   </div>;
+};
 
 export default NodeDisplay
 

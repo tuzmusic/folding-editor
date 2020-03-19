@@ -47,7 +47,7 @@ class App extends React.Component<any, State> {
       <TextDisplayContainer>
         {
           this.state.model.tree.map((root: MarkdownNode, i) => {
-            return <NodeDisplay node={ root } key={ i }/>
+            return <NodeDisplay node={ root } indentLevel={ 0 } key={ i }/>
           })
         }
       </TextDisplayContainer>
