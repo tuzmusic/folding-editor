@@ -1,5 +1,5 @@
 import { FoldingDocument } from "./FoldingDocument";
-import { HeaderTags } from "./MarkdownModel";
+import { HeaderTags, HtmlTags } from "./MarkdownModel";
 
 export class MarkdownNode {
   // tag = "";
@@ -7,13 +7,13 @@ export class MarkdownNode {
   // document: FoldingDocument | null = null;
   parent: HeaderNode | null = null;
   
-  constructor(public tag: string, public text: string, public document: FoldingDocument) {}
+  constructor(public tag: HtmlTags, public text: string, public document: FoldingDocument) {}
   
   // note: because this calls its subclasses, which of course reference this class,
   // these 3 classes must be in the same file to avoid circular imports in multiple files.
   // there may be a way to fix this by defining this function in its own file,
   // but that's actually also a challenge.
-  static create(tag: string, text: string, document: FoldingDocument): MarkdownNode {
+  static create(tag: HtmlTags, text: string, document: FoldingDocument): MarkdownNode {
     if (Object.keys(HeaderTags).includes(tag)) {
       return new HeaderNode(tag, text, document)
     } else /* if (Object.keys(ChildlessTags).includes(tag)) */ {
@@ -22,8 +22,7 @@ export class MarkdownNode {
   }
 }
 
-export class BodyNode extends MarkdownNode {
-}
+export class BodyNode extends MarkdownNode {}
 
 export class HeaderNode extends MarkdownNode {
   children: MarkdownNode[] = [];

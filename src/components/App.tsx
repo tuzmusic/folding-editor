@@ -20,6 +20,7 @@ const TextDisplayContainer = styled(FullWidthFlexDiv)({
   flex: 1,
   border: 'solid black thin',
   flexDirection: 'column',
+  padding: '10px'
 });
 
 // endregion

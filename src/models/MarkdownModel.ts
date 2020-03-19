@@ -9,7 +9,9 @@ export type MarkdownNode = {
   parent: MarkdownNode | null
 }
 
-export enum ChildlessTags {
+export type HtmlTags = BodyTags | HeaderTags
+
+export enum BodyTags {
   p = "p"
 }
 
@@ -22,15 +24,13 @@ export enum HeaderTags {
   h6 = "h6",
 }
 
-export type TwainTextChildNode = ["p", string] | string[];
-export type TwainTextParentNode = ["h1" | "h2" | "h3" | "h4" | "h5" | "h6", string] | string[];
-export type TwainTextNode = TwainTextChildNode | TwainTextParentNode
+export type TwainTextNode = [HtmlTags, string]
 //endregion
 
 const isHeaderNode = (node: MarkdownNode): boolean =>
   Object.keys(HeaderTags).includes(node.tag);
 const isBodyNode = (node: MarkdownNode): boolean =>
-  Object.keys(ChildlessTags).includes(node.tag);
+  Object.keys(BodyTags).includes(node.tag);
 
 /** @return lowest available parent on a node */
 export function getLastParent(node: MarkdownNode): MarkdownNode {

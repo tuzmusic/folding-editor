@@ -23,7 +23,6 @@ export class FoldingDocument {
     return doc;
   };
   
-  
   parseTree = () => {
     this.twainNodes.forEach(([tag, text]) => {
       const node = MarkdownNode.create(tag, text, this);

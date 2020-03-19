@@ -1,24 +1,30 @@
 import React from 'react';
 import { HeaderNode, MarkdownNode } from "../models/MarkdownNode";
+import styled from "@emotion/styled";
 
 type Props = { node: MarkdownNode }
 
-function renderNode({ tag, text }: MarkdownNode) {
-  // NODE: children can be COMPONENTS (which will be trees)
-  return React.createElement(tag, { children: [text] });
+function renderNode(node: MarkdownNode) {
+  const { tag, text } = node;
+  const StyledNode = styled(tag)({
+    ':hover': {
+      textDecoration: node instanceof HeaderNode ? 'underline' : 'none',
+    }
+  });
+  
+  return <StyledNode>{ text }</StyledNode>;
 }
 
-const NodeDisplay = ({ node }: Props) => {
-  console.log(node);
-  const { tag, text } = node;
-  const renderedChildren = (node instanceof HeaderNode) ? node.children.map((child, i) =>
+const renderChildren = (node: HeaderNode) =>
+  node.children.map((child, i) =>
     <NodeDisplay node={ child } key={ i }/>
-  ) : null;
-  
-  return <>
+  );
+
+const NodeDisplay = ({ node }: Props) =>
+  <div>
     { renderNode(node) }
-    { renderedChildren || null }
-  </>
-};
+    { node instanceof HeaderNode && renderChildren(node) }
+  </div>;
 
 export default NodeDisplay
+
