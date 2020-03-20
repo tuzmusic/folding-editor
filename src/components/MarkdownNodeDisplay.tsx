@@ -7,30 +7,40 @@ type Props = {
   indentLevel: number
 }
 
+const INDENT_SPACES = 4;
+
 const renderChildren = (node: HeaderNode, indentLevel: number) =>
   node.children.map((child, i) =>
     <NodeDisplay node={ child } indentLevel={ indentLevel + 1 } key={ i }/>
   );
 
+const Wrapper = styled.div({
+  whiteSpace: 'pre-wrap',
+  display: 'flex' // render spaces and text side-by-side
+});
+
 const NodeDisplay = ({ node, indentLevel }: Props) => {
   
-  const [folded, setFolded] = useState(false);
   const { tag, text } = node;
   
+  const [folded, setFolded] = useState(false);
   const toggleFolded = () => setFolded(!folded);
   
-  const StyledNode = styled(tag)<{ indentLevel: number }>(({
-    ':hover': {
-      textDecoration: node instanceof HeaderNode ? 'underline' : 'none',
-    }
-  }), ({ indentLevel }) => ({ marginLeft: indentLevel * 10 }));
+  const isHeader = node instanceof HeaderNode;
+  const indentSpaces = Array(indentLevel * INDENT_SPACES).fill(' ').join('');
   
-  return <div>
-    <StyledNode indentLevel={ indentLevel } onClick={ toggleFolded }>
-      { text }
-    </StyledNode>
-    { !folded && node instanceof HeaderNode && renderChildren(node, indentLevel) }
-  </div>;
+  const StyledNode = styled(tag)<{ indentLevel: number }>({
+    ':hover': { textDecoration: isHeader ? 'underline' : 'none', }
+  });
+  
+  return <>
+    <Wrapper>
+      <p>{ indentSpaces }</p> {/* spaces are same size regardless of main tag */ }
+      <StyledNode indentLevel={ indentLevel } onClick={ toggleFolded }>
+        { text }
+      </StyledNode></Wrapper>
+    { !folded && isHeader && renderChildren(node as HeaderNode, indentLevel) }
+  </>;
 };
 
 export default NodeDisplay
