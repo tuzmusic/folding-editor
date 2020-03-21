@@ -1,4 +1,4 @@
-import { TwainTextNode } from "../MarkdownModel";
+import { TwainTextNode } from "../types";
 
 /*
 00    h1

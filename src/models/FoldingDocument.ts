@@ -1,7 +1,7 @@
 import { HeaderNode, MarkdownNode } from "./MarkdownNode";
-import { TwainTextNode } from "./MarkdownModel";
 //@ts-ignore
 import Twain from 'mark-twain';
+import { TwainTextNode } from "./types";
 
 export class FoldingDocument {
   twainNodes: TwainTextNode[] = [];

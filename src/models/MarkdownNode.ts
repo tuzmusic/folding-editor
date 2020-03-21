@@ -1,5 +1,5 @@
 import { FoldingDocument } from "./FoldingDocument";
-import { HeaderTags, HtmlTags } from "./MarkdownModel";
+import { HeaderTags, HtmlTags } from "./types";
 
 export class MarkdownNode {
   // tag = "";

@@ -3,10 +3,10 @@ import styled from '@emotion/styled';
 import { FullWidthFlexDiv } from "./StyledComponents";
 //@ts-ignore
 import { FoldingDocument } from "../models/FoldingDocument";
-import { TwainTextNode } from "../models/MarkdownModel";
 import { basicStack1 } from "../models/__tests__/twainStacks";
 import MarkdownTreeView from "./MarkdownTreeView";
 import SimpleTextEditView from "./SimpleTextEditView";
+import { TwainTextNode } from "../models/types";
 
 // region Subcomponents
 const Container = styled(FullWidthFlexDiv)({
