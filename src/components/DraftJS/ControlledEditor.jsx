@@ -1,34 +1,20 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 
+const ControlledEditor = () => {
+    const [ editorState, setEditorState ] = useState(EditorState.createEmpty());
+    const onEditorStateChange = (newState) => setEditorState(newState);
 
-class ControlledEditor extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            editorState: EditorState.createEmpty(),
-        };
-    }
+    return (
+        <Editor
+            editorState={ editorState }
+            wrapperClassName="demo-wrapper"
+            editorClassName="demo-editor"
+            onEditorStateChange={ onEditorStateChange }
+        />
+    );
 
-    onEditorStateChange = (editorState) => {
-        this.setState({
-            editorState,
-        });
-    };
-
-    render() {
-        const { editorState } = this.state;
-        window['ed'] = editorState;
-        return (
-            <Editor
-                editorState={ editorState }
-                wrapperClassName="demo-wrapper"
-                editorClassName="demo-editor"
-                onEditorStateChange={ this.onEditorStateChange }
-            />
-        );
-    }
-}
+};
 
 export default ControlledEditor;
