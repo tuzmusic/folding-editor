@@ -5,10 +5,11 @@ import * as serviceWorker from './serviceWorker';
 
 import { Editor } from 'react-draft-wysiwyg';
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import ControlledEditor from "./components/DraftJS/ControlledEditor";
 
 const EditorComponent = () => <Editor/>;
-
-ReactDOM.render(<EditorComponent/>, document.getElementById('root'));
+//@ts-ignore
+ReactDOM.render(<ControlledEditor/>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
