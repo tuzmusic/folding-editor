@@ -1,26 +1,18 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { FullWidthFlexDiv } from "./StyledComponents";
-import sampleText from '../fixtures/sample';
 //@ts-ignore
 import { FoldingDocument } from "../models/FoldingDocument";
-import { MarkdownNode } from "../models/MarkdownNode";
 import { TwainTextNode } from "../models/MarkdownModel";
-import NodeDisplay from "./MarkdownNodeDisplay";
 import { basicStack1 } from "../models/__tests__/twainStacks";
+import MarkdownTreeView from "./MarkdownTreeView";
+import SimpleTextEditView from "./SimpleTextEditView";
 
 // region Subcomponents
 const Container = styled(FullWidthFlexDiv)({
   flexDirection: 'column',
   height: '95vh',
   boxSizing: 'border-box',
-});
-
-const TextDisplayContainer = styled(FullWidthFlexDiv)({
-  flex: 1,
-  border: 'solid black thin',
-  flexDirection: 'column',
-  padding: '10px'
 });
 
 // endregion
@@ -34,25 +26,28 @@ class App extends React.Component<any, State> {
   
   constructor(props: any) {
     super(props);
-    const text = sampleText;
+    const text = "";
     // const markdown = Twain(text).content.slice(1); // content[0] is "article"
     const markdown = basicStack1;
-    const model = FoldingDocument.fromTwainNodes(markdown);
+    const model = FoldingDocument.fromText(text);
     
     this.state = { text, markdown, model }
   }
   
-  render = () => (
-    <Container>
-      <TextDisplayContainer>
-        {
-          this.state.model.tree.map((root: MarkdownNode, i) => {
-            return <NodeDisplay node={ root } indentLevel={ 0 } key={ i }/>
-          })
-        }
-      </TextDisplayContainer>
-    </Container>
-  );
+  setModelText = (text: string) => {
+    console.log(text);
+    this.setState({ model: FoldingDocument.fromText(text) })
+  };
+  
+  render = () => {
+    const { text } = this.state.model;
+    return (
+      <Container>
+        <SimpleTextEditView text={ text } setText={ this.setModelText }/>
+        <MarkdownTreeView tree={ this.state.model.tree }/>
+      </Container>
+    );
+  };
 }
 
 export default App;

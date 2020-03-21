@@ -11,7 +11,7 @@ const INDENT_SPACES = 4;
 
 const renderChildren = (node: HeaderNode, indentLevel: number) =>
   node.children.map((child, i) =>
-    <NodeDisplay node={ child } indentLevel={ indentLevel + 1 } key={ i }/>
+    <MarkdownNodeView node={ child } indentLevel={ indentLevel + 1 } key={ i }/>
   );
 
 const Wrapper = styled.div({
@@ -19,7 +19,7 @@ const Wrapper = styled.div({
   display: 'flex' // render spaces and text side-by-side
 });
 
-const NodeDisplay = ({ node, indentLevel }: Props) => {
+const MarkdownNodeView = ({ node, indentLevel }: Props) => {
   
   const { tag, text } = node;
   
@@ -43,5 +43,5 @@ const NodeDisplay = ({ node, indentLevel }: Props) => {
   </>;
 };
 
-export default NodeDisplay
+export default MarkdownNodeView
 
