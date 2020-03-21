@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { FullWidthFlexDiv } from "./StyledComponents";
-//@ts-ignore
 import { FoldingDocument } from "../models/FoldingDocument";
 import { basicStack1 } from "../models/__tests__/twainStacks";
 import MarkdownTreeView from "./MarkdownTreeView";
