@@ -45,6 +45,20 @@ export class DJContainerNode extends DJNode {
     return lowestHeaderChild.lowestHeaderChild // RECURSION CASE
   }
   
+  getAllChildKeys(): string[] {
+    const allKeys = [] as string[];
+    
+    function getChildKeys(node: DJContainerNode): void {
+      node.children.forEach(child => {
+        allKeys.push(child.key); // BASE CASE (always)
+        if (child instanceof DJContainerNode) getChildKeys(child); // RECURSION CASE
+      })
+    }
+    
+    getChildKeys(this);
+    return allKeys;
+  }
+  
   addChildNode = (child: DJNode) => {
     this.children.push(child);
     child.parent = this;

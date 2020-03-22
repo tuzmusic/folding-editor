@@ -20,11 +20,8 @@ export default class DJDoc {
   static fromBlocks(blocks: RawDraftContentBlock[]): DJDoc {
     const doc = new DJDoc();
     const nodes = blocks.map(block => DJNode.fromRaw(block));
-    // doc.nodes = nodes;
-    
     doc.parseTree(nodes);
-    
-    return doc
+    return doc;
   }
   
   parseTree(nodes) {

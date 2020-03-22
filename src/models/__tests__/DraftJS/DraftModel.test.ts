@@ -3,6 +3,22 @@ import { RawDraftContentBlock } from "draft-js";
 import DJNode, { DJContainerNode } from "../../../components/DraftJS/DJNode";
 
 describe('tree: headers and paragraphs only', () => {
+  /*
+00    h1
+01      h2
+02        h3
+03    h1
+04      h3
+05        p
+06      h2   <-- still comes after the h3, as its sibling
+07        p
+08        p
+09        p
+10      h2
+11        p
+12        h6
+13    h1
+*/
   const levels = [1, 2, 3, 1, 3, 0, 2, 0, 0, 0, 2, 0, 6, 1];
   const orderedTags = [
     "paragraph",
@@ -14,44 +30,54 @@ describe('tree: headers and paragraphs only', () => {
     "header-six",
   ];
   
-  const blocks: Partial<RawDraftContentBlock>[] = levels.map((n, i) => {
-    const block: Partial<RawDraftContentBlock> = {
-      key: i.toString(),
-      type: orderedTags[n]
-    };
-    return block;
+  const blocks = levels.map((n, i) => ({
+    key: i.toString(),
+    type: orderedTags[n]
+  })) as RawDraftContentBlock[];
+  
+  const doc = DJDoc.fromBlocks(blocks);
+  const tree = doc.tree;
+  
+  describe('parseTree', () => {
+    it('creates a tree', () => {
+      expect(tree.length).toEqual(3);
+      
+      const [h1a, h1b, h1c] = tree as DJContainerNode[];
+      const [h3a, h2b, h2c] = h1b.children as DJContainerNode[];
+      
+      expect(h1a.children.length).toEqual(1);
+      expect(h1b.children.length).toEqual(3);
+      
+      let h1aChild = h1a.children[0] as DJContainerNode;
+      expect(h1aChild.parent).toEqual(h1a);
+      expect(h1aChild.children.length).toEqual(1);
+      
+      let h1aChildChild = h1aChild.children[0] as DJContainerNode;
+      expect(h1aChildChild.key).toEqual("2");
+      expect(h1aChildChild.type).toEqual("header-three");
+      expect(h1aChildChild.children.length).toEqual(0);
+      
+      expect(h3a.children.length).toEqual(1);
+      expect(h2b.children.length).toEqual(3);
+      expect(h2c.children.length).toEqual(2);
+      const h2cChild = h2c.children[1] as DJContainerNode;
+      expect(h2cChild.key).toEqual("12");
+      expect(h2cChild.type).toEqual("header-six");
+      expect((h2cChild).children.length).toEqual(0);
+      
+      expect(h1c.children.length).toEqual(0);
+    });
   });
   
-  it('creates a tree', () => {
-    const doc = DJDoc.fromBlocks(blocks as RawDraftContentBlock[]);
-    const tree = doc.tree;
-    expect(tree.length).toEqual(3);
+  describe('getAllChildKeys', () => {
+    const h1a = tree[1] as DJContainerNode;
     
-    const [h1a, h1b, h1c] = tree as DJContainerNode[];
-    const [h3a, h2b, h2c] = h1b.children as DJContainerNode[];
-    
-    expect(h1a.children.length).toEqual(1);
-    expect(h1b.children.length).toEqual(3);
-    
-    let h1aChild = h1a.children[0] as DJContainerNode;
-    expect(h1aChild.parent).toEqual(h1a);
-    expect(h1aChild.children.length).toEqual(1);
-    
-    let h1aChildChild = h1aChild.children[0] as DJContainerNode;
-    expect(h1aChildChild.key).toEqual("2");
-    expect(h1aChildChild.type).toEqual("header-three");
-    expect(h1aChildChild.children.length).toEqual(0);
-    
-    expect(h3a.children.length).toEqual(1);
-    expect(h2b.children.length).toEqual(3);
-    expect(h2c.children.length).toEqual(2);
-    const h2cChild = h2c.children[1] as DJContainerNode;
-    expect(h2cChild.key).toEqual("12");
-    expect(h2cChild.type).toEqual("header-six");
-    expect((h2cChild).children.length).toEqual(0);
-    
-    expect(h1c.children.length).toEqual(0);
+    const childKeys = [4, 5, 6, 7, 8, 9, 10, 11, 12].map(n => n.toString());
+    it('gets the keys of the children of a node', () => {
+      expect(h1a.getAllChildKeys()).toEqual(childKeys);
+    });
   });
+  
 });
 
 describe('basic model', () => {

@@ -1,3 +1,7 @@
+import { HeaderNode } from "../../MarkdownNode";
+import { basicStack1 } from "../fixtures/twainStacks";
+import { FoldingDocument } from "../../FoldingDocument";
+
 describe('object oriented', () => {
   it('OBJECT-ORIENTED: can parse more complex trees', () => {
     // todo: can markdown actually create this tree? (I think so)
@@ -18,7 +22,6 @@ describe('object oriented', () => {
 12        h6
 13    h1
     */
-  `
     
     const doc = FoldingDocument.fromTwainNodes(basicStack1);
     const tree = doc.tree;
@@ -53,4 +56,4 @@ describe('object oriented', () => {
   })
   
 });
-;
+
