@@ -1,5 +1,5 @@
 import DJNode, { DJContainerNode } from "./DJNode";
-import { RawDraftContentBlock } from "draft-js";
+import { convertToRaw, EditorState, RawDraftContentBlock, RawDraftContentState } from "draft-js";
 
 export default class DJDoc {
   
@@ -15,6 +15,12 @@ export default class DJDoc {
         return node as DJContainerNode;
     // if we didn't find one, return null
     return null;
+  }
+  
+  static fromEditorState(editorState: EditorState): DJDoc {
+    const rawContentState: RawDraftContentState = convertToRaw(editorState.getCurrentContent());
+    const blocks: RawDraftContentBlock[] = rawContentState.blocks;
+    return DJDoc.fromBlocks(blocks);
   }
   
   static fromBlocks(blocks: RawDraftContentBlock[]): DJDoc {
