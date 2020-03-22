@@ -1,7 +1,7 @@
-import { FoldingDocument } from "../FoldingDocument";
-import { HeaderNode } from "../MarkdownNode";
-import { basicStack1 } from "./twainStacks";
-import { MarkdownNode, MarkdownStack } from "../types";
+import { FoldingDocument } from "../../FoldingDocument";
+import { HeaderNode } from "../../MarkdownNode";
+import { basicStack1 } from "../fixtures/twainStacks";
+import { MarkdownNode, MarkdownStack } from "../../types";
 
 type LooseMarkdownStack = Partial<MarkdownNode>[]
 
@@ -9,7 +9,6 @@ const simpleNodes = (nodes: Partial<MarkdownNode>[]): MarkdownStack => nodes.map
     return { ...node, parent: null, children: [] } as MarkdownNode;
   }
 );
-
 
 describe('object oriented', () => {
   it('OBJECT-ORIENTED: can parse more complex trees', () => {

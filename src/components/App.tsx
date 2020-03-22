@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { FullWidthFlexDiv } from "./StyledComponents";
 import { FoldingDocument } from "../models/FoldingDocument";
-import { basicStack1 } from "../models/__tests__/twainStacks";
+import { basicStack1 } from "../models/__tests__/fixtures/twainStacks";
 import MarkdownTreeView from "./MarkdownTreeView";
 import SimpleTextEditView from "./SimpleTextEditView";
 import { TwainTextNode } from "../models/types";

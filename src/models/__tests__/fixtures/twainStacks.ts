@@ -1,4 +1,4 @@
-import { TwainTextNode } from "../types";
+import { TwainTextNode } from "../../types";
 
 /*
 00    h1
