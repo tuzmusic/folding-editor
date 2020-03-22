@@ -2,13 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import * as serviceWorker from './serviceWorker';
-
-import { Editor } from 'react-draft-wysiwyg';
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import ControlledEditor from "./components/DraftJS/ControlledEditor";
 
-const EditorComponent = () => <Editor/>;
-//@ts-ignore
 ReactDOM.render(<ControlledEditor/>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

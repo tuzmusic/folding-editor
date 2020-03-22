@@ -22,6 +22,7 @@ export default class DJNode {
 
 export class DJContainerNode extends DJNode {
   children: DJNode[] = [];
+  folded: boolean = false;
   
   get headerLevel(): number {
     const numbers = [
