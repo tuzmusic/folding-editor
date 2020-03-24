@@ -69,6 +69,13 @@ class DJEditor extends React.Component<Props, State> {
     );
   }
 
+  forceRender = () => {
+    const { editorState } = this.state;
+    const content = editorState.getCurrentContent();
+    const newEditorState = EditorState.createWithContent(content);
+    this.setState({ editorState: newEditorState });
+  };
+
   get rawContentState(): RawDraftContentState {
     return convertToRaw(this.state.editorState.getCurrentContent());
   }
@@ -99,7 +106,7 @@ class DJEditor extends React.Component<Props, State> {
         foldedParents[anchorKey] = parentNode.getAllChildKeys();
       }
       return { foldedParents };
-    });
+    }, this.forceRender);
   };
 
   blockRen = (contentBlock) => {
